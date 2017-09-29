@@ -10,7 +10,7 @@ use MayBeTall\Alexa\Endpoint\Intent;
 /**
  * Handles the requests sent by the Alexa Skill.
  * @link https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/alexa-skills-kit-interface-reference#request-format Alexa's Request Format
-*/
+ */
 class Request
 {
     /**
@@ -54,7 +54,8 @@ class Request
      * Gets the payload object
      * @return string The payload object sent by Alexa.
      */
-    public static function getPayload() {
+    public static function getPayload()
+    {
         return self::$payload;
     }
 
@@ -62,20 +63,31 @@ class Request
      * Gets the attributes object
      * @return string The attributes sent by Alexa.
      */
-    public static function getAttributes() {
+    public static function getAttributes()
+    {
         if (property_exists(self::$payload->session, 'attributes')) {
             return self::$payload->session->attributes;
         } else {
             return (object) array();
         }
-        
+
+    }
+
+    public static function getUser()
+    {
+        if (property_exists(self::$payload->session, 'user')) {
+            return self::$payload->session->user->userId;
+        } else {
+            return "na";
+        }
     }
 
     /**
      * Gets the request type.
      * @return string The request type.
      */
-    public static function getType() {
+    public static function getType()
+    {
         return self::$type;
     }
 
@@ -91,7 +103,7 @@ class Request
         }
 
         $applicationId = self::$payload->session->application->applicationId;
-        $validId = in_array($applicationId, SUPPORTED_APPLICATION_IDS);
+        $validId       = in_array($applicationId, SUPPORTED_APPLICATION_IDS);
 
         // If the ID is a valid ID or the app is allowing all IDs.
         if ($validId || ALLOW_ALL_REQUESTS) {

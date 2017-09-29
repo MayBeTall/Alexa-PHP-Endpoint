@@ -47,6 +47,15 @@ class Alexa
     }
 
     /**
+     * Get the userid
+     * @see Request::getUser
+     */
+    public static function theUser()
+    {
+        return Request::getUser();
+    }
+
+    /**
      * Make Alexa forget something from the conversation.
      * @see Response::removeSessionAttribute
      * @param string $attribute The attribute to forget, or pass nothing for her to forget everything.
@@ -68,18 +77,18 @@ class Alexa
         $ssml = (strpos($text, '<speak>') !== false && strpos($text, '</speak>') !== false);
 
         // Format the data the way Alexa expects
-        $type = $ssml ? 'SSML' : 'PlainText';
+        $type     = $ssml ? 'SSML' : 'PlainText';
         $property = $ssml ? 'ssml' : 'text';
 
         // Set up the data
         $say = (object) array(
-            "response"=>(object) array (
-                "outputSpeech"=>(object) array (
-                    "type"=>$type,
-                    $property=>$text
-                )
+            "response"         => (object) array(
+                "outputSpeech" => (object) array(
+                    "type"    => $type,
+                    $property => $text,
+                ),
             ),
-            "shouldEndSession"=>$endSession
+            "shouldEndSession" => $endSession,
         );
 
         // Append it to the Response and send it to Alexa
@@ -94,29 +103,29 @@ class Alexa
      */
     public static function ask($text, $repromt = "")
     {
-        $ssml = (strpos($text, '<speak>') !== false && strpos($text, '</speak>') !== false);
-        $type = $ssml ? 'SSML' : 'PlainText';
+        $ssml     = (strpos($text, '<speak>') !== false && strpos($text, '</speak>') !== false);
+        $type     = $ssml ? 'SSML' : 'PlainText';
         $property = $ssml ? 'ssml' : 'text';
 
-        $ssml2 = (strpos($repromt, '<speak>') !== false && strpos($repromt, '</speak>') !== false);
-        $type2 = $ssml2 ? 'SSML' : 'PlainText';
+        $ssml2     = (strpos($repromt, '<speak>') !== false && strpos($repromt, '</speak>') !== false);
+        $type2     = $ssml2 ? 'SSML' : 'PlainText';
         $property2 = $ssml2 ? 'ssml' : 'text';
 
         // Set up the data
         $say = (object) array(
-            "response"=>(object) array (
-                "outputSpeech"=>(object) array (
-                    "type"=>$type,
-                    $property=>$text
+            "response" => (object) array(
+                "outputSpeech"     => (object) array(
+                    "type"    => $type,
+                    $property => $text,
                 ),
-                "reprompt"=>(object) array (
-                    "outputSpeech"=>(object) array (
-                        "type"=>$type2,
-                        $property2=>$repromt
-                    )
+                "reprompt"         => (object) array(
+                    "outputSpeech" => (object) array(
+                        "type"     => $type2,
+                        $property2 => $repromt,
+                    ),
                 ),
-                "shouldEndSession"=>false
-            )
+                "shouldEndSession" => false,
+            ),
         );
 
         // Append it to the Response and send it to Alexa
@@ -128,7 +137,8 @@ class Alexa
      * Runs a function if Alexa skill launched.
      * @param  callable $callback The callback function to run if Alexa just launched
      */
-    public static function enters($callback) {
+    public static function enters($callback)
+    {
         if (Request::getType() == 'LaunchRequest') {
             $callback();
         }
@@ -138,7 +148,8 @@ class Alexa
      * Runs a function if Alexa skill exited.
      * @param  callable $callback The callback function to run if Alexa just exited
      */
-    public static function exits($callback) {
+    public static function exits($callback)
+    {
         if (Request::getType() == 'SessionEndedRequest') {
             $callback();
             // You have to send a responce even if it is empty.
