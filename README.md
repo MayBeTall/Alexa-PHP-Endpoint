@@ -9,6 +9,10 @@ Here's a simple Hello World skill made with it:
 // Include the library
 require __DIR__ . '/alexa-endpoint/autoload.php';
 
+// include the certificate check 
+// this validates the request has been sent from alexa
+require __DIR__ . '/certificate_check.php';
+
 // Import classes
 use MayBeTall\Alexa\Endpoint\Alexa;
 use MayBeTall\Alexa\Endpoint\User;
