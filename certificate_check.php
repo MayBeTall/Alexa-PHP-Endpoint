@@ -9,9 +9,13 @@ if (time() - strtotime($timestamp) > 150) {
     header('HTTP/1.1 400 Bad Request');
     die();
 }
-
-$headers = apache_request_headers();
-
+if(function_exists('apache_request_headers')) {
+    $headers = apache_request_headers();
+}
+else{
+    $headers['Signature'] = $_SERVER['HTTP_SIGNATURE'];
+    $headers['SignatureCertChainUrl'] = $_SERVER['HTTP_SIGNATURECERTCHAINURL'];
+}
 
 $signatuer = base64_decode($headers['Signature']);
 
